@@ -1,0 +1,36 @@
+SUBDESIGN NO2
+(
+      GCK43,P10,P4,P2,P14,P13:INPUT;
+      P7,P3,P5,P9,P15,P19,P16,P18,P6,P20,P1:OUTPUT;
+)
+VARIABLE 
+      DIVX[13..0],4MOD[1..0],SP[2..0],KEY[3..0]:DFF;
+BEGIN
+      DIVX[].CLK=GCK43;
+      DIVX[]=DIVX[]+1;
+      SP[].CLK=DIVX13;
+      SP0=P10 OR P4 OR P2;
+      4MOD[].CLK=DIVX13 OR P10 OR P4 OR P2;
+      4MOD[]=4MOD[]+1;
+      SP1=SP0;
+      P6=SP0 AND !SP1;
+      SP2=P6;
+      P20=SP2;
+      P1=P13 NOR P14;
+      TABLE
+            4MOD1,4MOD0 => P15,P19,P16,P18;
+            0,0 => 0,0,0,1;
+            0,1 => 0,0,1,0;
+            1,0 => 0,1,0,0;
+            1,1 => 1,0,0,0;
+      END TABLE;
+      KEY[].CLK=P6;
+      KEY3=P10;
+      KEY2=P4;
+      KEY1=4MOD1;
+      KEY0=4MOD0;
+      P7=KEY3;
+      P3=KEY2;
+      P5=KEY1;
+      P9=KEY0;
+END;

@@ -1,0 +1,28 @@
+SUBDESIGN NO1
+(
+      GCK43,P3,P2,P4:INPUT;
+      DCBA[3..0],4MOD[1..0]:OUTPUT;
+)
+VARIABLE
+      DEB[1..0],CNT[15..0],4MOD[1..0]:DFF;
+BEGIN
+      DEB[].CLK=GCK43;
+      DEB1=P2;
+      DEB0=P4;
+      CNT[].CLRN=!P3;
+      CNT[].CLK=DEB1;	
+      IF       CNT[]       ==H"9999" THEN CNT[]=0;
+      ELSIF CNT[11..0]==H"999"  THEN CNT[]=CNT[]+H"667";
+      ELSIF CNT[7..0]  ==H"99"    THEN CNT[]=CNT[]+H"67";
+      ELSIF CNT[3..0]  ==H"9"      THEN CNT[]=CNT[]+H"7";
+      ELSE  CNT[]=CNT[]+1;
+      END IF;
+      4MOD[].CLK=DEB0;
+      4MOD[]=4MOD[]+1;
+      CASE 4MOD[] IS
+            WHEN 0 =>DCBA[]=CNT[15..12];
+            WHEN 1 =>DCBA[]=CNT[11..8];
+            WHEN 2 =>DCBA[]=CNT[7..4];
+            WHEN 3 =>DCBA[]=CNT[3..0];
+      END CASE;
+END;

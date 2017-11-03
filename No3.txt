@@ -1,0 +1,28 @@
+SUBDESIGN NO3
+(
+      GCK43,CLR,P19,P21,P5,P22,P7,P20:INPUT;
+      24MOD[5..0],P8,P4,P6:OUTPUT;
+)
+VARIABLE
+      DEB[1..0],24MOD[5..0]:DFF;
+BEGIN
+      DEB[1..0].CLK=GCK43;
+      DEB1=P21;
+      DEB0=P5;
+      24MOD[].CLRN=!CLR;	
+      IF 24MOD[]==H"23" THEN 24MOD[]=H"00";
+      ELSIF 24MOD[]==H"19" THEN 24MOD[]=H"20";
+      ELSIF 24MOD[]==H"09" THEN 24MOD[]=H"10";
+      ELSE 24MOD[]=24MOD[]+1;
+      END IF;	
+      CASE P20 IS
+            WHEN 0=>24MOD[].CLK=P19;
+                              P8=P7;
+                              P4=P22;
+                              P6=P7;
+            WHEN 1=>24MOD[].CLK=DEB1 AND P22;
+                              P8=DEB0 AND P22;
+                              P4=GND;
+                              P6=VCC;
+      END CASE;
+END;
